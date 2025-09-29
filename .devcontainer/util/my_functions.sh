@@ -26,7 +26,7 @@ deployDynatraceApp(){
   export DT_HOST=$(echo $DT_TENANT | cut -d'/' -f3 | cut -d'.' -f1)
 
   # replace host in app config for Dynatrace App Deployment
-  sed -i "s/ENVIRONMENTID/$DT_HOST/" app.config.json
+  sed "s/ENVIRONMENTID/$DT_HOST/" app.config.json > tmpfile && mv tmpfile app.config.json
 
   CODESPACE_NAME=${CODESPACE_NAME}
   TODO_PORT=30100
@@ -43,11 +43,14 @@ deployDynatraceApp(){
   fi
 
   # Replace placeholders in quizData.ts to embed links in the Dynatrace app
-  sed -i "s|{{BUGZAPPER_URL}}|${BUGZAPPER_URL}|g" ui/app/data/quizData.ts
-  sed -i "s|{{TODO_URL}}|${TODO_URL}|g" ui/app/data/quizData.ts
-  sed -i "s|{{ENVIRONMENT_ID}}|${DT_HOST}|g" ui/app/data/quizData.ts
+  sed -e "s|{{BUGZAPPER_URL}}|${BUGZAPPER_URL}|g" \
+    -e "s|{{TODO_URL}}|${TODO_URL}|g" \
+    -e "s|{{ENVIRONMENT_ID}}|${DT_HOST}|g" \
+    ui/app/data/quizData.ts > tmpfile && mv tmpfile ui/app/data/quizData.ts
+
 
   printInfo "Installing Dynatrace quiz app dependencies."
+  #FIXME: Evaluate that this is installed.
   npm install
 
   # deploy dynatrace app - note this will fail if the version in app.config.json has already been deployed
