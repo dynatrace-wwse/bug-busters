@@ -51,6 +51,13 @@ deployDynatraceApp(){
 
   printInfo "Installing Dynatrace quiz app dependencies."
   #FIXME: Evaluate that this is installed.
+  if command -v npm >/dev/null 2>&1; then
+    printInfo "npm is installed"
+  else
+    printWarn "npm is not installed, installing it"
+    installNpm
+  fi
+
   npm install
 
   # deploy dynatrace app - note this will fail if the version in app.config.json has already been deployed
@@ -58,4 +65,10 @@ deployDynatraceApp(){
   npx dt-app deploy
 
   cd ..
+}
+
+installNpm(){
+  printInfoSection "Installing NodeJS and NPM"
+  sudo apt update
+  sudo apt install nodejs npm -y
 }
