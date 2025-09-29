@@ -13,29 +13,9 @@ customFunction(){
 
 }
 
-deployBugZapperApp(){
-  printInfoSection "Deploying BugZapper App"
-
-  kubectl create ns bugzapper
-
-  # Create deployment of todoApp
-  kubectl -n bugzapper create deploy bugzapper --image=jhendrick/bugzapper-game:latest
-
-  # Expose deployment of todoApp with a Service
-  kubectl -n bugzapper expose deployment bugzapper --type=NodePort --name=bugzapper --port=3000 --target-port=3000
-
-  # Define the NodePort to expose the app from the Cluster
-  kubectl patch service bugzapper --namespace=bugzapper --type='json' --patch='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value":30200}]'
-
-  waitForAllReadyPods bugzapper
-
-  waitAppCanHandleRequests 30200
-
-  printInfoSection "Bugzapper is available via NodePort=30200"
-}
 
 setLiveDebuggerVersionControlEnv(){
-  printInfo "Settings Live Debugger Version Control Environment Variables."
+  printInfoSection "Patching TODO Kubernetes deployment to set environment variables for the Live Debugger Version Control."
   bash app/patches/set_version_control.sh
 }
 
@@ -46,7 +26,7 @@ deployDynatraceApp(){
   export DT_HOST=$(echo $DT_TENANT | cut -d'/' -f3 | cut -d'.' -f1)
 
   # replace host in app config for Dynatrace App Deployment
-  sed -i "s/ENVIRONMENTID/$DT_HOST/" app.config.json
+  sed "s/ENVIRONMENTID/$DT_HOST/" app.config.json > tmpfile && mv tmpfile app.config.json
 
   CODESPACE_NAME=${CODESPACE_NAME}
   TODO_PORT=30100
@@ -63,11 +43,21 @@ deployDynatraceApp(){
   fi
 
   # Replace placeholders in quizData.ts to embed links in the Dynatrace app
-  sed -i "s|{{BUGZAPPER_URL}}|${BUGZAPPER_URL}|g" ui/app/data/quizData.ts
-  sed -i "s|{{TODO_URL}}|${TODO_URL}|g" ui/app/data/quizData.ts
-  sed -i "s|{{ENVIRONMENT_ID}}|${DT_HOST}|g" ui/app/data/quizData.ts
+  sed -e "s|{{BUGZAPPER_URL}}|${BUGZAPPER_URL}|g" \
+    -e "s|{{TODO_URL}}|${TODO_URL}|g" \
+    -e "s|{{ENVIRONMENT_ID}}|${DT_HOST}|g" \
+    ui/app/data/quizData.ts > tmpfile && mv tmpfile ui/app/data/quizData.ts
+
 
   printInfo "Installing Dynatrace quiz app dependencies."
+  #FIXME: Evaluate that this is installed.
+  if command -v npm >/dev/null 2>&1; then
+    printInfo "npm is installed"
+  else
+    printWarn "npm is not installed, installing it"
+    installNpm
+  fi
+
   npm install
 
   # deploy dynatrace app - note this will fail if the version in app.config.json has already been deployed
@@ -75,4 +65,10 @@ deployDynatraceApp(){
   npx dt-app deploy
 
   cd ..
+}
+
+installNpm(){
+  printInfoSection "Installing NodeJS and NPM"
+  sudo apt update
+  sudo apt install nodejs npm -y
 }
