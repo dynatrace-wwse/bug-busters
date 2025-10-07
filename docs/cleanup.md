@@ -1,5 +1,8 @@
 --8<-- "snippets/cleanup.js"
 
+--8<-- "snippets/feedback.md"
+
+
 Congratulations on being a top tier bug finder!
 
 For admins, below are some tips on cleaning up the enviornment.
