@@ -16,4 +16,4 @@ assertRunningApp todoapp
 
 assertRunningPod bugzapper bugzapper
 
-assertRunningApp 30200
+assertRunningApp bugzapper
