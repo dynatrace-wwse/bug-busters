@@ -21,11 +21,7 @@
 
   "postStartCommand": "./.devcontainer/post-start.sh",
   
-  "features": {
-	"ghcr.io/devcontainers/features/node:1": {
-      "version": "22"
-    }
-  },
+  "features": {},
   "customizations": {
     "vscode": {
       // Set container specific settings
