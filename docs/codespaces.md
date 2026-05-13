@@ -27,7 +27,7 @@
 
 Your Codespace has now deployed the following resources:
 
-- A local Kubernetes ([kind](https://kind.sigs.k8s.io/){target="_blank"}) cluster monitored by Dynatrace, with some pre-deployed apps that will be used later in the demo.
+- A local Kubernetes ([k3d](https://k3d.io/){target="_blank"}) cluster monitored by Dynatrace, with some pre-deployed apps that will be used later in the demo.
 
 - The Todo Java App and the Bugzapper Node.js app which will be used in our debugging quiz
 

@@ -3,7 +3,7 @@
 ## Bug 1: Why are the top scores not being cleared?
 There are a few bugs in the Bugzapper app and your mission is to find them by investigating the application and using Dynatrace to help your investigation.
 
-Open the bugzappers game in your browser (if its not open, go to the codespaces 'Ports' tab and open the app on port 30200 in your browser)
+Open the bugzappers game in your browser (if its not open, run `printGreeting` in the terminal and open the app URL shown there)
 
 To start, play a game to make sure there are some top scores on the scoreboard:
 
