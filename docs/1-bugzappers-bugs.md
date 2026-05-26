@@ -1,4 +1,3 @@
---8<-- "snippets/bugzappers-bugs.js"
 
 ## Bug 1: Why are the top scores not being cleared?
 There are a few bugs in the Bugzapper app and your mission is to find them by investigating the application and using Dynatrace to help your investigation.
