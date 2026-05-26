@@ -1,4 +1,3 @@
---8<-- "snippets/3-codespaces.js"
 
 ## Bug 1: Todo App - Clear completed tasks
 

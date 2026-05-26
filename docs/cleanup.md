@@ -1,4 +1,3 @@
---8<-- "snippets/cleanup.js"
 
 --8<-- "snippets/feedback.md"
 
