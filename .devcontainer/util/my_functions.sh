@@ -29,17 +29,18 @@ deployDynatraceApp(){
   sed "s/ENVIRONMENTID/$DT_HOST/" app.config.json > tmpfile && mv tmpfile app.config.json
 
   CODESPACE_NAME=${CODESPACE_NAME}
-  TODO_PORT=30100
-  BUGZAPPER_PORT=30200
+  local detected_ip
+  detected_ip=$(detectIP)
 
   printInfo "Updating Quiz questions with codespaces URLs."
 
   if [ -n "$CODESPACE_NAME" ]; then
-    BUGZAPPER_URL="https://${CODESPACE_NAME}-${BUGZAPPER_PORT}.app.github.dev"
-    TODO_URL="https://${CODESPACE_NAME}-${TODO_PORT}.app.github.dev"
+    # Both apps share port 80 via nginx ingress; use subdomains
+    BUGZAPPER_URL="https://${CODESPACE_NAME}-80.app.github.dev"
+    TODO_URL="https://${CODESPACE_NAME}-80.app.github.dev"
   else
-    BUGZAPPER_URL="http://localhost:30200"
-    TODO_URL="http://localhost:30100"
+    BUGZAPPER_URL="http://bugzapper.${detected_ip}.${MAGIC_DOMAIN}"
+    TODO_URL="http://todoapp.${detected_ip}.${MAGIC_DOMAIN}"
   fi
 
   # Replace placeholders in quizData.ts to embed links in the Dynatrace app
