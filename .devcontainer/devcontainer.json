@@ -33,13 +33,11 @@
   },
   	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
-		30100,
-		30200
+		80
 	],
 	// add labels
 	"portsAttributes": {
-		"30100": { "label": "Application Web UI" },
-		"30200": { "label": "Bugzapper App" }
+		"80": { "label": "Application Web UI" }
 	},
   // DT components don't start successfully with 2 cores, bumping to 4
 	"hostRequirements": {
