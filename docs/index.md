@@ -1,3 +1,12 @@
+---
+description: Find bugs in two applications, BugZappers (an asteroids-style game) and a Todo app, with a few hints along the way. Use Dynatrace Live Debugger, Logs and Traces to track each one down.
+tags:
+  - classic
+  - live-debugger
+  - debugging
+  - logs
+---
+
 !!! warning "Not yet migrated to the Dynatrace Enablement App"
     This content has not been migrated to a fully immersive, interactive and self-service training.
     Questions or feedback? Reach out to the Center of Excellence Enablement Team via
